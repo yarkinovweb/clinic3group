@@ -10,7 +10,7 @@ const { rolecheck } = require("../middlewares/rolecheck.middleware.js");
 const apptRouter = express.Router();
 
 // Hamma endpointlar login qilgan bo'lishi shart
-// apptRouter.use(authentication);
+apptRouter.use(authentication);
 
 // 1. GET (Ko'rish) - Hamma kirishi mumkin (Controller ichida ajratilgan)
 apptRouter.get("/", getAllAppointments);

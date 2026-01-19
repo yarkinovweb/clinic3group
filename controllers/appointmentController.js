@@ -73,8 +73,14 @@ exports.updateAppointmentStatus = async (req, res) => {
             if (userRole === 'doctor' && appointment.doctor_id !== userId) {
                  return res.status(403).json({ message: "Faqat o'z qabulingizni bekor qila olasiz" });
             }
-            if (userRole === 'patient' && appointment.patient_id !== userId) {
-                 return res.status(403).json({ message: "Faqat o'z arizangizni bekor qila olasiz" });
+            if (userRole === 'patient') {
+                if (appointment.patient_id !== userId) {
+                    return res.status(403).json({ message: "Faqat o'z arizangizni bekor qila olasiz" });
+                }
+                // Patient faqat approved bo'lmagan appointmentni cancel qila oladi
+                if (appointment.status === 'approved') {
+                    return res.status(403).json({ message: "Tasdiqlangan uchrashuvni bekor qila olmaysiz" });
+                }
             }
         }
 
