@@ -14,7 +14,7 @@ app.get('/', async (req, res) => {
     try {
         const result = await db.query('SELECT NOW()');
         res.json({ 
-            message: "Clinic API ishlayapti!", 
+            message: "API ulashni eplabsan, qoyil", 
             time: result.rows[0].now 
         });
     } catch (err) {

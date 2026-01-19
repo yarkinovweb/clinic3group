@@ -7,7 +7,6 @@ const userRouter = express.Router();
 
 userRouter.use(authentication);
 
-// Faqat Admin hamma userlarni ko'ra oladi
 userRouter.get("/", rolecheck("admin"), async (req, res) => {
     try {
         const result = await pool.query("SELECT id, name, email, role FROM users");

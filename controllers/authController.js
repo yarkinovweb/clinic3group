@@ -17,9 +17,6 @@ exports.register = async (req, res) => {
       [name, email, shifrlanganPassword, role]
     );
 
-    // Agar Doctor yoki Patient bo'lsa, ularning profillarini ham yaratish kerak
-    // Hozircha soddalik uchun faqat User yaratdik.
-    
     res.status(201).json({ message: "User yaratildi", data: result.rows[0] });
   } catch (error) {
     console.log(error);
@@ -27,7 +24,6 @@ exports.register = async (req, res) => {
   }
 };
 
-// LOGIN
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -35,17 +31,16 @@ exports.login = async (req, res) => {
     const result = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
     
     if (result.rowCount === 0) {
-      return res.status(404).json({ message: "Email yoki parol xato" });
+      return res.status(404).json({ message: "Email yoki paroling xato" });
     }
 
     const user = result.rows[0];
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(404).json({ message: "Email yoki parol xato" });
+      return res.status(404).json({ message: "Email yoki paroling xato" });
     }
 
-    // Token yaratish
     const token = jwt.sign(
         { id: user.id, role: user.role }, 
         process.env.JWT_SECRET, 
