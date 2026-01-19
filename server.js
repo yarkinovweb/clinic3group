@@ -9,7 +9,6 @@ app.use(express.json());
 app.use(cors());
 app.use(express.json());
 
-// Test uchun endpoint
 app.get('/', async (req, res) => {
     try {
         const result = await db.query('SELECT NOW()');
