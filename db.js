@@ -12,7 +12,7 @@ pool.connect((err, client, release) => {
     if (err) {
         return console.error('Bazaga ulanishda xato:', err.stack);
     }
-    console.log("DB ulandik");
+    console.log('bazasiga muvaffaqiyatli ulandi!');
     release();
 });
 
