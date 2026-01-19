@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinic API - Login Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 1200px;
+            width: 100%;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .info-section {
+                display: none;
+            }
+        }
+
+        .login-section {
+            padding: 50px 40px;
+        }
+
+        .info-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .info-section h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .info-section p {
+            margin-bottom: 15px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .quick-login {
+            margin-bottom: 30px;
+        }
+
+        .quick-login h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #555;
+        }
+
+        .role-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .role-btn {
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .role-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .response-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .response-section.show {
+            display: block;
+        }
+
+        .response-section h3 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .response-content {
+            background: #fff;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .success {
+            border-left-color: #28a745;
+        }
+
+        .error {
+            border-left-color: #dc3545;
+        }
+
+        .token-display {
+            margin-top: 15px;
+            padding: 10px;
+            background: #fff3cd;
+            border-radius: 6px;
+            font-size: 12px;
+            word-break: break-all;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .clear-btn {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .clear-btn:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-section">
+            <h1>🔐 Login Test</h1>
+            <p class="subtitle">Clinic API Authentication</p>
+
+            <div class="alert alert-info">
+                ⚠️ Avval serverni ishga tushiring: <code>npm start</code>
+            </div>
+
+            <div class="quick-login">
+                <h3>Tez Login:</h3>
+                <div class="role-buttons">
+                    <button class="role-btn" onclick="fillAdminCredentials()">👨‍💼 Admin</button>
+                    <button class="role-btn" onclick="fillDoctorCredentials()">👨‍⚕️ Doctor</button>
+                    <button class="role-btn" onclick="fillPatientCredentials()">🧑‍🦱 Patient</button>
+                </div>
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required placeholder="example@clinic.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required placeholder="Parolingizni kiriting">
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    Login
+                </button>
+            </form>
+
+            <div class="response-section" id="responseSection">
+                <h3 id="responseTitle">Response:</h3>
+                <div class="response-content" id="responseContent"></div>
+                <div class="token-display" id="tokenDisplay" style="display: none;">
+                    <strong>Token:</strong> <span id="tokenText"></span>
+                </div>
+                <button class="clear-btn" onclick="clearResponse()">Tozalash</button>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>📚 Clinic API</h2>
+            <p>Bu test sahifa Clinic Management System API ning login funksiyasini test qilish uchun.</p>
+            
+            <ul class="feature-list">
+                <li>JWT Authentication</li>
+                <li>Role-based Access Control</li>
+                <li>Admin, Doctor, Patient rollari</li>
+                <li>Secure Password Hashing</li>
+                <li>24-soatlik Token</li>
+            </ul>
+
+            <h3 style="margin-top: 30px; margin-bottom: 15px;">Test Accounts:</h3>
+            <p><strong>Admin:</strong> admin@clinic.com / admin123</p>
+            <p><strong>Doctor:</strong> doctor@clinic.com / doctor123</p>
+            <p><strong>Patient:</strong> patient@clinic.com / patient123</p>
+
+            <p style="margin-top: 30px; font-size: 12px; opacity: 0.7;">
+                API URL: http://localhost:3000<br>
+                Endpoint: POST /auth/login
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000';
+
+        // Quick login functions
+        function fillAdminCredentials() {
+            document.getElementById('email').value = 'admin@clinic.com';
+            document.getElementById('password').value = 'admin123';
+        }
+
+        function fillDoctorCredentials() {
+            document.getElementById('email').value = 'doctor@clinic.com';
+            document.getElementById('password').value = 'doctor123';
+        }
+
+        function fillPatientCredentials() {
+            document.getElementById('email').value = 'patient@clinic.com';
+            document.getElementById('password').value = 'patient123';
+        }
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const responseSection = document.getElementById('responseSection');
+            const responseContent = document.getElementById('responseContent');
+            const responseTitle = document.getElementById('responseTitle');
+            const tokenDisplay = document.getElementById('tokenDisplay');
+            const tokenText = document.getElementById('tokenText');
+
+            // Disable button
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Loading...';
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                // Show response section
+                responseSection.classList.add('show');
+
+                if (response.ok) {
+                    // Success
+                    responseTitle.textContent = '✅ Login Muvaffaqiyatli!';
+                    responseContent.className = 'response-content success';
+                    responseContent.textContent = JSON.stringify(data, null, 2);
+                    
+                    // Show token
+                    tokenDisplay.style.display = 'block';
+                    tokenText.textContent = data.token;
+
+                    // Save to localStorage
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+
+                    console.log('Login successful!', data);
+                } else {
+                    // Error
+                    responseTitle.textContent = '❌ Login Xatosi';
+                    responseContent.className = 'response-content error';
+                    responseContent.textContent = JSON.stringify(data, null, 2);
+                    tokenDisplay.style.display = 'none';
+                }
+            } catch (error) {
+                // Network error
+                responseSection.classList.add('show');
+                responseTitle.textContent = '❌ Network Xatosi';
+                responseContent.className = 'response-content error';
+                responseContent.textContent = `Serverga ulanishda xatolik:\n${error.message}\n\nServerni ishga tushirganingizga ishonch hosil qiling.`;
+                tokenDisplay.style.display = 'none';
+                console.error('Error:', error);
+            } finally {
+                // Re-enable button
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Login';
+            }
+        });
+
+        // Clear response
+        function clearResponse() {
+            const responseSection = document.getElementById('responseSection');
+            responseSection.classList.remove('show');
+        }
+
+        // Check if already logged in
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('token');
+            const user = localStorage.getItem('user');
+            
+            if (token && user) {
+                console.log('Already logged in:', JSON.parse(user));
+                console.log('Token:', token);
+            }
+        });
+    </script>
+</body>
+</html>
