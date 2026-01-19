@@ -1,28 +1,29 @@
-const express = require("express");
-const cors = require("cors");
-require("dotenv").config();
-
-// Routerlarni chaqirib olamiz
-const authRoutes = require("./routes/authRoutes");
-const appointmentRoutes = require("./routes/appointmentRoutes");
-const userRoutes = require("./routes/userRoutes");
+const express = require('express');
+const cors = require('cors');
+require('dotenv').config();
+const db = require('./db');
 
 const app = express();
+app.use(express.json());
 
 app.use(cors());
 app.use(express.json());
 
-// Routerlarni ulaymiz
-app.use("/api/auth", authRoutes);
-app.use("/api/appointments", appointmentRoutes);
-app.use("/api/users", userRoutes);
-
-// Test uchun
-app.get("/", (req, res) => {
-    res.send("Clinic API is working...");
+// Test uchun endpoint
+app.get('/', async (req, res) => {
+    try {
+        const result = await db.query('SELECT NOW()');
+        res.json({ 
+            message: "Clinic API ishlayapti!", 
+            time: result.rows[0].now 
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-  console.log(`Server ishga tushdi: ${PORT}`);
+    console.log(`Server ${PORT}-portda ishga tushdi`);
 });
