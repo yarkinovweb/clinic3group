@@ -10,9 +10,9 @@ const pool = new Pool({
 
 pool.connect((err, client, release) => {
     if (err) {
-        return console.error('❌ Bazaga ulanishda xato:', err.stack);
+        return console.error('Bazaga ulanishda xato:', err.stack);
     }
-    console.log('✅ PostgreSQL bazasiga muvaffaqiyatli ulandi!');
+    console.log("DB ulanishda xatolik");
     release();
 });
 

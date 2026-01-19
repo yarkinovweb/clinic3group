@@ -5,11 +5,11 @@ const db = require('./db');
 
 const app = express();
 
-// Middlewarelar
+
 app.use(cors());
 app.use(express.json());
 
-// Test uchun endpoint
+
 app.get('/', async (req, res) => {
     try {
         const result = await db.query('SELECT NOW()');
